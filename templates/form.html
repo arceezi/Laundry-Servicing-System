@@ -1,0 +1,35 @@
+<h2>Book a Laundry Service</h2>
+
+<form method="post" action="">
+  <input type="hidden" name="action" value="book" />
+
+  <label>
+    Name
+    <input name="customer_name" value="{{VAL_NAME}}" required />
+  </label>
+
+  <label>
+    Contact Number
+    <input name="contact_number" value="{{VAL_CONTACT}}" required />
+  </label>
+
+  <label>
+    Weight of Laundry (kg)
+    <input name="weight_kg" value="{{VAL_WEIGHT}}" type="number" step="0.01" min="0.01" required />
+  </label>
+
+  <label>
+    Service Type
+    <select name="service_type" required>
+      <option value="">-- Select --</option>
+      <option value="regular" {{SEL_REGULAR}}>Regular Wash</option>
+      <option value="express" {{SEL_EXPRESS}}>Express Wash</option>
+      <option value="dry" {{SEL_DRY}}>Dry Cleaning</option>
+    </select>
+  </label>
+
+  <div class="btn-row">
+    <button type="submit">Book Laundry</button>
+    <button type="reset">Clear Details</button>
+  </div>
+</form>
