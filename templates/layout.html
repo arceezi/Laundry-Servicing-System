@@ -4,29 +4,38 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{PAGE_TITLE}}</title>
+  <!-- External stylesheet for page layout and form/table styling -->
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
+  <!-- Main page wrapper to keep content centered and consistent -->
   <main class="container">
     <h1>{{PAGE_TITLE}}</h1>
+
+    <!-- Session details are injected by PHP for tracking/testing session state -->
     <div class="session-info">
       <p>Session ID: {{SESSION_ID}}</p>
       <p>Session started at: {{SESSION_STARTED_AT}}</p>
+      <!-- Button/form injected by PHP to reset the session (clears saved orders) -->
       {{NEW_SESSION_FORM}}
     </div>
 
+    <!-- Dynamic alerts (errors/success messages) -->
     <section class="alerts">
       {{ALERTS_BLOCK}}
     </section>
 
+    <!-- Booking form block -->
     <section class="card">
       {{FORM_BLOCK}}
     </section>
 
+    <!-- Saved orders table block -->
     <section class="card">
       {{TABLE_BLOCK}}
     </section>
 
+    <!-- Prompt section is conditionally injected (only shown after successful booking) -->
     {{PROMPT_SECTION}}
   </main>
 </body>

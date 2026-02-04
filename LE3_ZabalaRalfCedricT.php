@@ -5,25 +5,45 @@ Date Created: 2025-02-14
 Problem Description: Laundry Servicing System using multidimensional arrays in PHP to store bookings, compute total cost with discounts, and display results dynamically.
 */
 
+// -------------------------------
+// Bootstrapping: session + timezone
+// -------------------------------
+// Start/continue the session so bookings persist across page reloads (same browser session).
 session_start();
+// Force all date()/time outputs to use Philippine local time.
 date_default_timezone_set("Asia/Manila");
 
+
 $SERVICES = [
+// -------------------------------
+// Service catalog (price per kg)
+// -------------------------------
+// Keys (regular|express|dry) are used by the form and by the booking records stored in the session.
     "regular" => ["label" => "Regular Wash", "price_per_kg" => 20.00],
     "express" => ["label" => "Express Wash", "price_per_kg" => 30.50],
     "dry" => ["label" => "Dry Cleaning", "price_per_kg" => 50.00],
 ];
 
+
+// -------------------------------
+// Helper functions
+// -------------------------------
 function loadTemplate(string $path): string
 {
+// Loads an HTML template file as a string (keeps HTML separate from PHP logic).
     return file_get_contents($path);
 }
 
+// Formats a numeric value as currency (2 decimal places).
 function money(float $value): string
 {
     return number_format($value, 2);
 }
 
+// Returns the discount rate based on STRICT thresholds (must match the lab rules):
+//  - weight > 20kg => 15%
+//  - weight > 10kg => 10%
+//  - otherwise     => 0%
 function discountRate(float $weightKg): float
 {
     if ($weightKg > 20) {
@@ -37,6 +57,7 @@ function discountRate(float $weightKg): float
     return 0.00;
 }
 
+// Computes subtotal, discount, and final total given the weight and service price.
 function computeTotals(float $weightKg, float $pricePerKg): array
 {
     $subtotal = $weightKg * $pricePerKg;
@@ -52,6 +73,7 @@ function computeTotals(float $weightKg, float $pricePerKg): array
     ];
 }
 
+// Validates user input from the form and returns a list of human-readable error messages.
 function validate(array $post, array $services): array
 {
     $errors = [];
@@ -77,6 +99,15 @@ function validate(array $post, array $services): array
     return $errors;
 }
 
+// -------------------------------
+// Session state initialization
+// -------------------------------
+// These session keys are the 'database' of the app (in-memory per browser session).
+// bookings          : list of all booking records
+// next_id           : auto-increment id for display
+// show_prompt       : controls visibility of the 'New Entry' prompt UI
+// session_started_at: shown to user for reference/debugging
+
 if (!isset($_SESSION["bookings"])) {
     $_SESSION["bookings"] = [];
 }
@@ -93,6 +124,11 @@ if (!isset($_SESSION["session_started_at"])) {
     $_SESSION["session_started_at"] = date("Y-m-d H:i:s");
 }
 
+// -------------------------------
+// Action: New Session (clear orders + regenerate session id)
+// -------------------------------
+// This is mainly for testing: it wipes the current session and starts a brand-new one.
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "new_session") {
     session_unset();
     session_destroy();
@@ -108,6 +144,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "new_s
     header("Location: " . strtok($_SERVER["REQUEST_URI"], "?"));
     exit;
 }
+
+// -------------------------------
+// Request-scoped variables (used to render the page)
+// -------------------------------
+// alerts         : validation errors to show to the user
+// successMessage : success notice after saving
+// formValues     : used to repopulate the form after POST (UX-friendly)
 
 $alerts = [];
 $successMessage = "";
@@ -129,6 +172,14 @@ if (isset($_GET["new"])) {
         ];
     }
 }
+
+// -------------------------------
+// Action: Book Laundry (form submit)
+// -------------------------------
+// 1) Collect inputs
+// 2) Validate
+// 3) Compute totals + discount
+// 4) Save booking record into $_SESSION['bookings']
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "book") {
     $formValues["name"] = trim((string)($_POST["customer_name"] ?? ""));
@@ -166,6 +217,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "book"
     }
 }
 
+// -------------------------------
+// Build alert HTML (errors + success)
+// -------------------------------
+// Note: htmlspecialchars() prevents HTML injection from user input.
+
 $alertsBlock = "";
 if (!empty($alerts)) {
     $alertItems = "";
@@ -178,6 +234,10 @@ if (!empty($alerts)) {
 if ($successMessage !== "") {
     $alertsBlock .= "<div class=\"success\">" . htmlspecialchars($successMessage) . "</div>";
 }
+
+// -------------------------------
+// Build dynamic table rows from session bookings
+// -------------------------------
 
 $bookingRows = "";
 foreach ($_SESSION["bookings"] as $booking) {
@@ -196,6 +256,11 @@ foreach ($_SESSION["bookings"] as $booking) {
         . "<td>" . htmlspecialchars($booking["created_at"]) . "</td>"
         . "</tr>";
 }
+
+// -------------------------------
+// Render templates (HTML files) by replacing placeholder tokens
+// -------------------------------
+// Using __DIR__ makes paths work regardless of where the script is run from.
 
 $tableTemplate = loadTemplate(__DIR__ . "/templates/table.html");
 $tableBlock = str_replace("{{BOOKING_ROWS}}", $bookingRows, $tableTemplate);

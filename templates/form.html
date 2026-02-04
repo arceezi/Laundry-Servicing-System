@@ -1,25 +1,42 @@
 <h2>Book a Laundry Service</h2>
 
+<!-- Main form for submitting a laundry booking -->
 <form method="post" action="">
+  <!-- Hidden field used by PHP to identify the form action -->
   <input type="hidden" name="action" value="book" />
 
+  <!-- Customer name input -->
   <label>
     Name
+    <!-- Value placeholder allows PHP to repopulate input after submit -->
     <input name="customer_name" value="{{VAL_NAME}}" required />
   </label>
 
+  <!-- Contact number input -->
   <label>
     Contact Number
+    <!-- Stored as text to allow leading zeros -->
     <input name="contact_number" value="{{VAL_CONTACT}}" required />
   </label>
 
+  <!-- Laundry weight input -->
   <label>
     Weight of Laundry (kg)
-    <input name="weight_kg" value="{{VAL_WEIGHT}}" type="number" step="0.01" min="0.01" required />
+    <!-- Numeric input with decimal support and minimum valid weight -->
+    <input
+      name="weight_kg"
+      value="{{VAL_WEIGHT}}"
+      type="number"
+      step="0.01"
+      min="0.01"
+      required
+    />
   </label>
 
+  <!-- Service selection dropdown -->
   <label>
     Service Type
+    <!-- Selected option is controlled by PHP placeholder flags -->
     <select name="service_type" required>
       <option value="">-- Select --</option>
       <option value="regular" {{SEL_REGULAR}}>Regular Wash</option>
@@ -28,8 +45,12 @@
     </select>
   </label>
 
+  <!-- Action buttons -->
   <div class="btn-row">
+    <!-- Submits the form and triggers booking logic in PHP -->
     <button type="submit">Book Laundry</button>
+
+    <!-- Resets only the form fields (does NOT clear session bookings) -->
     <button type="reset">Clear Details</button>
   </div>
 </form>
