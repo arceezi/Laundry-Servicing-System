@@ -88,6 +88,26 @@ if (!isset($_SESSION["show_prompt"])) {
     $_SESSION["show_prompt"] = false;
 }
 
+if (!isset($_SESSION["session_started_at"])) {
+    $_SESSION["session_started_at"] = date("Y-m-d H:i:s");
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "new_session") {
+    session_unset();
+    session_destroy();
+    setcookie(session_name(), "", time() - 3600, "/");
+    session_start();
+    session_regenerate_id(true);
+    $_SESSION["bookings"] = [];
+    $_SESSION["next_id"] = 1;
+    $_SESSION["show_prompt"] = false;
+    if (!isset($_SESSION["session_started_at"])) {
+        $_SESSION["session_started_at"] = date("Y-m-d H:i:s");
+    }
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], "?"));
+    exit;
+}
+
 $alerts = [];
 $successMessage = "";
 $formValues = [
@@ -215,8 +235,29 @@ $promptBlock = str_replace("{{PROMPT_UI}}", $promptUi, $promptTemplate);
 
 $layoutTemplate = loadTemplate(__DIR__ . "/templates/layout.html");
 $output = str_replace(
-    ["{{PAGE_TITLE}}", "{{ALERTS_BLOCK}}", "{{FORM_BLOCK}}", "{{TABLE_BLOCK}}", "{{PROMPT_BLOCK}}"],
-    ["Laundry Servicing System (LE3)", $alertsBlock, $formBlock, $tableBlock, $promptBlock],
+    [
+        "{{PAGE_TITLE}}",
+        "{{SESSION_ID}}",
+        "{{SESSION_STARTED_AT}}",
+        "{{NEW_SESSION_FORM}}",
+        "{{ALERTS_BLOCK}}",
+        "{{FORM_BLOCK}}",
+        "{{TABLE_BLOCK}}",
+        "{{PROMPT_BLOCK}}",
+    ],
+    [
+        "Laundry Servicing System (LE3)",
+        htmlspecialchars(session_id()),
+        htmlspecialchars((string)$_SESSION["session_started_at"]),
+        "<form method=\"post\" class=\"session-form\">"
+            . "<input type=\"hidden\" name=\"action\" value=\"new_session\" />"
+            . "<button type=\"submit\">New Session (Clear Orders)</button>"
+            . "</form>",
+        $alertsBlock,
+        $formBlock,
+        $tableBlock,
+        $promptBlock,
+    ],
     $layoutTemplate
 );
 

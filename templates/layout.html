@@ -9,6 +9,11 @@
 <body>
   <main class="container">
     <h1>{{PAGE_TITLE}}</h1>
+    <div class="session-info">
+      <p>Session ID: {{SESSION_ID}}</p>
+      <p>Session started at: {{SESSION_STARTED_AT}}</p>
+      {{NEW_SESSION_FORM}}
+    </div>
 
     <section class="alerts">
       {{ALERTS_BLOCK}}
