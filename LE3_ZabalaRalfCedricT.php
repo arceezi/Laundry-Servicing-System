@@ -233,6 +233,10 @@ if (!empty($_SESSION["show_prompt"])) {
         . "</div>";
 }
 $promptBlock = str_replace("{{PROMPT_UI}}", $promptUi, $promptTemplate);
+$promptSection = "";
+if (!empty($_SESSION["show_prompt"])) {
+    $promptSection = "<section class=\"card\">{$promptBlock}</section>";
+}
 
 $layoutTemplate = loadTemplate(__DIR__ . "/templates/layout.html");
 $output = str_replace(
@@ -244,7 +248,7 @@ $output = str_replace(
         "{{ALERTS_BLOCK}}",
         "{{FORM_BLOCK}}",
         "{{TABLE_BLOCK}}",
-        "{{PROMPT_BLOCK}}",
+        "{{PROMPT_SECTION}}",
     ],
     [
         "Laundry Servicing System (LE3)",
@@ -257,7 +261,7 @@ $output = str_replace(
         $alertsBlock,
         $formBlock,
         $tableBlock,
-        $promptBlock,
+        $promptSection,
     ],
     $layoutTemplate
 );
