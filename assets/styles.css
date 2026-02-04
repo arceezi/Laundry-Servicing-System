@@ -1,27 +1,32 @@
+/* Apply consistent box sizing so padding/borders don’t cause overflow */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+/* Global theme and base typography */
 :root {
   color-scheme: light;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.5;
 }
 
+/* Page background and default text color */
 body {
   margin: 0;
   background: #f5f5f5;
   color: #1a1a1a;
 }
 
+/* Main content wrapper (centers the app) */
 .container {
   max-width: 960px;
   margin: 0 auto;
   padding: 24px;
 }
 
+/* Session info row (Session ID, start time, New Session button) */
 .session-info {
   display: flex;
   flex-wrap: wrap;
@@ -31,14 +36,17 @@ body {
   font-size: 0.95rem;
 }
 
+/* Remove default margins inside session info */
 .session-info p {
   margin: 0;
 }
 
+/* Prevent extra spacing around the New Session form */
 .session-info form {
   margin: 0;
 }
 
+/* Card-style container for form, table, and prompt */
 .card {
   background: #ffffff;
   border: 1px solid #d9d9d9;
@@ -47,12 +55,14 @@ body {
   margin-bottom: 16px;
 }
 
+/* Form label styling */
 label {
   display: block;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
+/* Ensure form controls stay within container width */
 label input,
 label select,
 label textarea {
@@ -66,6 +76,7 @@ label textarea {
   font: inherit;
 }
 
+/* Button group layout */
 .btn-row {
   display: flex;
   flex-wrap: wrap;
@@ -73,6 +84,7 @@ label textarea {
   margin-top: 12px;
 }
 
+/* Primary button styling (used for submit and links styled as buttons) */
 button,
 .btn {
   display: inline-block;
@@ -85,15 +97,18 @@ button,
   cursor: pointer;
 }
 
+/* Secondary/reset button styling */
 button[type="reset"] {
   background: transparent;
   color: #1e1e1e;
 }
 
+/* Wrapper for error and success messages */
 .alerts {
   margin-bottom: 16px;
 }
 
+/* Validation error message styling */
 .alerts .error {
   background: #ffe5e5;
   border: 1px solid #d93025;
@@ -103,6 +118,7 @@ button[type="reset"] {
   margin-bottom: 8px;
 }
 
+/* Success message styling */
 .alerts .success {
   background: #e7f7ed;
   border: 1px solid #188038;
@@ -112,12 +128,14 @@ button[type="reset"] {
   margin-bottom: 8px;
 }
 
+/* Booking table layout */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
 }
 
+/* Table cell borders and spacing */
 table th,
 table td {
   border: 1px solid #d6d6d6;
@@ -125,10 +143,12 @@ table td {
   text-align: left;
 }
 
+/* Table header background */
 table th {
   background: #f0f0f0;
 }
 
+/* Small note under Timestamp header (timezone info) */
 .table-note {
   display: block;
   font-size: 12px;
@@ -137,7 +157,7 @@ table th {
   opacity: 0.8;
 }
 
-
+/* New Entry prompt styling (shown after successful booking) */
 .prompt {
   border: 1px dashed #888888;
   padding: 12px;
