@@ -6,6 +6,7 @@ Problem Description: Laundry Servicing System using multidimensional arrays in P
 */
 
 session_start();
+date_default_timezone_set("Asia/Manila");
 
 $SERVICES = [
     "regular" => ["label" => "Regular Wash", "price_per_kg" => 20.00],
