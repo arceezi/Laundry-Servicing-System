@@ -16,6 +16,23 @@ body {
   padding: 24px;
 }
 
+.session-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.session-info p {
+  margin: 0;
+}
+
+.session-info form {
+  margin: 0;
+}
+
 .card {
   background: #ffffff;
   border: 1px solid #d9d9d9;
