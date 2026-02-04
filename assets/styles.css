@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: light;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -48,9 +54,11 @@ label {
 }
 
 label input,
-label select {
+label select,
+label textarea {
   display: block;
   width: 100%;
+  max-width: 100%;
   margin-top: 6px;
   padding: 8px 10px;
   border: 1px solid #cfcfcf;
